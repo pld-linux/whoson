@@ -1,8 +1,8 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	2.01
-Release:	5
+Version:	2.02
+Release:	1
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(es):	Red
@@ -11,7 +11,7 @@ Group(pt_BR):	Rede
 License:	Public domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
-Patch0:		%{name}-config.patch
+Source2:	%{name}.conf
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
@@ -88,26 +88,21 @@ Biblioteka statyczna whoson-a.
 
 %prep
 %setup  -q
-%patch0 -p1
 
 %build
-libtoolize -c -f
-autoheader
-aclocal
 autoconf
-automake -a -c
 %configure
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/run/whoson.{s,d}}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-install whoson.conf $RPM_BUILD_ROOT%{_sysconfdir}/
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
 
 gzip -9nf README whoson.txt
 
