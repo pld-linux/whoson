@@ -89,20 +89,10 @@ gzip -9nf README whoson.txt
 
 %post
 /sbin/ldconfig
-/sbin/chkconfig --add whosond
-if [ -f /var/lock/subsys/whosond ]; then
-	/etc/rc.d/init.d/whosond restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
-fi
+NAME=whosond; DESC="whosond daemon"; %chkconfig_add
 
 %preun
-if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del whosond
-	if [ -f /var/lock/subsys/whosond ]; then
-		/etc/rc.d/init.d/whosond stop >&2
-	fi
-fi
+NAME=whosond; %chkconfig_del
 
 %postun -p /sbin/ldconfig
 
