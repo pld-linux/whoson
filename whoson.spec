@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.01
-Release:	3
+Release:	4
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
@@ -35,6 +35,7 @@ Summary(pl):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
+Requires:	whoson
 
 %description server
 Whoson server binary and scripts
