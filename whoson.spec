@@ -1,12 +1,12 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	2.02a
-Release:	2
+Version:	2.03
+Release:	1
 Group:		Networking
 License:	Public Domain
 Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
-# Source0-md5: fe3d8399b7fcb9bf0565099dd954d383
+# Source0-md5:	9bb91b9e0d5a10574e78aa6647dd7ab9
 Source1:	%{name}.init
 Source2:	%{name}.conf
 BuildRequires:	autoconf
