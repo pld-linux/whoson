@@ -72,7 +72,7 @@ cat  << EOF > $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 . /etc/sysconfig/network
 
 # Check that networking is up.
-if [ \${NETWORKING} = "no" ]
+if [ "\${NETWORKING}" == "no" ]
 then
 	exit 0
 fi
