@@ -2,11 +2,12 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	1.08
-Release:	1
+Release:	2
 Group:		Networking
 Group(pl):	Sieciowe
 Copyright:	Public domain
-Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
+Source1:	whoson.init
 Patch0:		whoson-config.patch
 Patch1:		whoson-autoconf.patch
 BuildRoot:	/tmp/%{name}-%{version}-root
@@ -49,68 +50,18 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 make install install-man DESTDIR=$RPM_BUILD_ROOT
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
 
-cat  << EOF > $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
-#!/bin/bash
-#
-# whosond       Start/Stop whosond server
-#
-# chkconfig: 345 40 65
-# description:  whosond - implementation of WHOSON protocol
-#
-
-# Source function library.
-. /etc/rc.d/init.d/functions
-
-# Get config.
-. /etc/sysconfig/network
-
-# Check that networking is up.
-if [ "\${NETWORKING}" == "no" ]
-then
-	exit 0
-fi
-
-[ -f %{_sbindir}/whosond ] || exit 0
-
-# See how we were called.
-case "\$1" in
-  start)
-	show "Starting whosond: "
-	daemon whosond
-	touch /var/lock/subsys/whosond
-	;;
-  stop)
-	show "Stopping whosond services: "
-	killproc whosond
-	rm -f /var/lock/subsys/whosond
-	;;
-  status)
-	status whosond
-	;;
-  restart|reload)
-	\$0 stop
-	\$0 start
-	;;
-  *)
-	echo "Usage:\$0 {start|stop|status|restart|reload}"
-	exit 1
-esac
-
-exit 0
-EOF
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 
 %post
 /sbin/chkconfig --add whosond
 if test -r /var/run/whosond.pid; then
-	/etc/rc.d/init.d/whosond stop 2> /dev/null
-	/etc/rc.d/init.d/whosond start 2> /dev/null
+	/etc/rc.d/init.d/whosond restart 2> /dev/null
 else
 	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
 fi
