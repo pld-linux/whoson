@@ -2,11 +2,13 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.01
-Release:	4
+Release:	5
 Group:		Networking
 Group(de):	Netzwerkwesen
+Group(es):	Red
 Group(pl):	Sieciowe
-Copyright:	Public domain
+Group(pt_BR):	Rede
+License:	Public domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-config.patch
@@ -14,6 +16,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
 Prereq:		rc-scripts
+Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -48,8 +51,12 @@ Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
 
 %description devel
@@ -65,8 +72,12 @@ Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whoson-a
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name}-devel = %{version}
 
 %description static
@@ -74,6 +85,7 @@ Static whoson library.
 
 %description -l pl static
 Biblioteka statyczna whoson-a.
+
 %prep
 %setup  -q
 %patch0 -p1
@@ -99,7 +111,8 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 
 gzip -9nf README whoson.txt
 
-%postun -p /sbin/ldconfig
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post server
 /sbin/ldconfig
@@ -112,14 +125,13 @@ fi
 
 %preun server
 if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del whosond
 	if [ -f /var/lock/subsys/whosond ]; then
 		/etc/rc.d/init.d/whosond stop >&2
 	fi
+	/sbin/chkconfig --del whosond
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+%postun -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
