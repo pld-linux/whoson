@@ -11,7 +11,7 @@ Source1:	whoson.init
 Patch0:		whoson-config.patch
 Patch1:		whoson-autoconf.patch
 Requires:	rc-scripts
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
 %define		_sysconfigdir	/etc
