@@ -1,80 +1,169 @@
-diff -Nru whoson-1.08/Makefile.in whoson-1.08.new/Makefile.in
---- whoson-1.08/Makefile.in	Thu Jun  3 00:33:06 1999
-+++ whoson-1.08.new/Makefile.in	Fri Jun 25 21:18:52 1999
-@@ -86,48 +86,52 @@
- CLNTOBJS = clnt_tcp.o clnt_unix.o clnt_unixd.o clnt_udp.o
+diff -Nru whoson-1.09/Makefile.am whoson-1.09.new/Makefile.am
+--- whoson-1.09/Makefile.am	Tue Aug 31 18:18:04 1999
++++ whoson-1.09.new/Makefile.am	Tue Aug 31 18:15:43 1999
+@@ -13,55 +13,53 @@
+ CLNTSOURCES = clnt_tcp.c clnt_unix.c clnt_unixd.c clnt_udp.c
+ SERVSOURCES = serv_tcp.c serv_unix.c serv_unixd.c serv_udp.c
  
- .c.o:
--	${CC} ${CPPFLAGS} ${INCLUDES} ${DEFS} -c $<
-+	$(CC) $(CFLAGS) $(INCLUDES) $(DEFS) -c $<
+-bin_PROGRAMS = wtest
+-libexec_PROGRAMS = whosond
+-lib_LIBRARIES = libwhoson.a
+-lib_LTLIBRARIES = libwhoson.la
+-include_INCLUDES = whoson.h
+-man_MANS = whoson.conf.5 whoson.3 whosond.8
++bin_PROGRAMS =		wtest
++libexec_PROGRAMS =	whosond
++lib_LIBRARIES =		libwhoson.a
++lib_LTLIBRARIES =	libwhoson.la
  
- all: whosond libwhoson.a wtest
+-EXTRA_DIST = whoson.ms whoson.txt fix.pl whoson.conf $(man_MANS) \
++man_MANS =	whoson.conf.5 whosond.8 \
++		whoson.3 wso_version.3 wso_login.3 wso_logout.3 wso_query.3
++
++EXTRA_DIST =	whoson.ms whoson.txt fix.pl \
+ 		WHOSON/Changes WHOSON/MANIFEST WHOSON/Makefile.PL \
+ 		WHOSON/WHOSON.pm WHOSON/WHOSON.xs WHOSON/test.pl
  
--whosond: whosond.o mainloop.o rtconfig.o servlist.o ${SERVOBJS} \
-+whosond: whosond.o mainloop.o rtconfig.o servlist.o $(SERVOBJS) \
- 		serv_common.o lhash.o checkperm.o
--	${CC} ${LDFLAGS} -o whosond whosond.o mainloop.o rtconfig.o \
--		servlist.o ${SERVOBJS} serv_common.o lhash.o checkperm.o \
--		${LIBS}
-+	$(CC) $(LDFLAGS) -o whosond whosond.o mainloop.o rtconfig.o \
-+		servlist.o $(SERVOBJS) serv_common.o lhash.o checkperm.o \
-+		$(LIBS)
+-wtest_SOURCES = wtest.c
+-wtest_LDADD = libwhoson.la
+-wtest_LDFLAGS = -static
++wtest_SOURCES =	wtest.c
++wtest_LDADD =	libwhoson.la
++wtest_LDFLAGS =	-static
  
--libwhoson.a: clnt_common.o rtconfig.o clntlist.o ${CLNTOBJS} checkperm.o
--	${AR} r libwhoson.a clnt_common.o rtconfig.o clntlist.o ${CLNTOBJS} \
-+libwhoson.a: clnt_common.o rtconfig.o clntlist.o $(CLNTOBJS) checkperm.o
-+	$(AR) r libwhoson.a clnt_common.o rtconfig.o clntlist.o $(CLNTOBJS) \
- 		checkperm.o
--	${RANLIB} libwhoson.a
-+	$(RANLIB) libwhoson.a
+-whosond_SOURCES = serv_common.c whosond.c mainloop.c rtconfig.c servlist.c \
++whosond_SOURCES =	serv_common.c whosond.c mainloop.c rtconfig.c servlist.c \
+ 			lhash.c checkperm.c ${SERVSOURCES} \
+ 			whosond.h rtconfig.h report.h serv_common.h \
+ 			lhash.h checkperm.h
  
- wtest: wtest.o libwhoson.a
--	${CC} ${LDFLAGS} -o wtest wtest.o -L. -lwhoson ${LIBS}
-+	$(CC) $(LDFLAGS) -o wtest wtest.o -L. -lwhoson $(LIBS)
+-libwhoson_a_SOURCES = clnt_common.c rtconfig.c clntlist.c checkperm.c \
++whosond_conf =		whoson.conf
++DEFAULT_CONFIG =	$(sysconfdir)/$(whosond_conf)
++
++libwhoson_a_SOURCES =	clnt_common.c rtconfig.c clntlist.c checkperm.c \
+ 			${CLNTSOURCES} \
+-			whoson.h rtconfig.h report.h clnt_common.h \
++			rtconfig.h report.h clnt_common.h \
+ 			lhash.h checkperm.h
+ 
+-libwhoson_la_SOURCES = clnt_common.c rtconfig.c clntlist.c checkperm.c \
++libwhoson_la_SOURCES =	clnt_common.c rtconfig.c clntlist.c checkperm.c \
+ 			${CLNTSOURCES} \
+-			whoson.h rtconfig.h report.h clnt_common.h \
++			rtconfig.h report.h clnt_common.h \
+ 			lhash.h checkperm.h
+-libwhoson_la_LDFLAGS = -version-info 0:0:0
++libwhoson_la_LDFLAGS =	-version-info 0:0:0
+ 
+-MAN3XTRA = wso_version.3 wso_login.3 wso_logout.3 wso_query.3
++libwhosonincludedir=		$(includedir)
++libwhosoninclude_HEADERS =	whoson.h
+ 
+ install-data-hook:
+ 	if test -f $(DEFAULT_CONFIG); then \
+-		$(ECHO) "$(DEFAULT_CONFIG) exists, not overwritten"; \
++		$(ECHO) "$(DESTDIR)$(DEFAULT_CONFIG) exists, not overwritten"; \
+ 	else \
+-		$(INSTALL_DATA) $(srcdir)/whoson.conf $(DEFAULT_CONFIG); \
+-	fi; \
+-	for f in $(MAN3XTRA); do \
+-		rm -f $(DESTDIR)$(man3dir)/$$f; \
+-		$(LN) $(DESTDIR)$(man3dir)/whoson.3 $(DESTDIR)$(man3dir)/$$f; \
+-	done
++		$(INSTALL_DATA) $(srcdir)/whoson.conf $(DESTDIR)$(DEFAULT_CONFIG); \
++	fi
+ 
+ uninstall-local:
+-	rm -f $(DEFAULT_CONFIG); \
+-	for f in $(MAN3XTRA); do \
+-		rm -f $(DESTDIR)$(man3dir)/$$f; \
+-	done
++	rm -f $(DESTDIR)$(DEFAULT_CONFIG)
  
  whoson.txt: whoson.ms
--	${NROFF} -ms ${srcdir}/whoson.ms | ${PERL} ${srcdir}/fix.pl >whoson.txt
-+	$(NROFF) -ms $(srcdir)/whoson.ms | $(PERL) $(srcdir)/fix.pl >whoson.txt
+ 	${NROFF} -ms ${srcdir}/whoson.ms | ${PERL} ${srcdir}/fix.pl >whoson.txt
+diff -Nru whoson-1.09/aclocal.m4 whoson-1.09.new/aclocal.m4
+--- whoson-1.09/aclocal.m4	Mon Aug 30 15:56:18 1999
++++ whoson-1.09.new/aclocal.m4	Tue Aug 31 17:46:43 1999
+@@ -1,4 +1,4 @@
+-dnl aclocal.m4 generated automatically by aclocal 1.4
++dnl aclocal.m4 generated automatically by aclocal 1.4a
  
- install: all
--	${INSTALL} whosond ${sbindir}
--	${INSTALL} libwhoson.a ${libdir}
--	${INSTALL} ${srcdir}/whoson.h ${includedir}
--	if [ ! -f ${config} ]; then \
--		${INSTALL} ${srcdir}/whoson.conf ${config} ; \
-+	$(INSTALL) -d $(DESTDIR)$(sbindir) $(DESTDIR)$(libdir) \
-+		$(DESTDIR)$(includedir) $(DESTDIR)/etc
-+	$(INSTALL) whosond $(DESTDIR)$(sbindir)
-+	$(INSTALL) libwhoson.a $(DESTDIR)$(libdir)
-+	$(INSTALL) $(srcdir)/whoson.h $(DESTDIR)$(includedir)
-+	if [ ! -f $(DESTDIR)$(config) ]; then \
-+		$(INSTALL) $(srcdir)/whoson.conf $(DESTDIR)$(config) ; \
- 	else \
--		${ECHO} "whoson.conf not replaced" ; \
-+		$(ECHO) "whoson.conf not replaced" ; \
- 	fi
+ dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+ dnl This file is free software; the Free Software Foundation
+@@ -21,6 +21,8 @@
  
- install-man:
--	${INSTALL} ${srcdir}/whoson.conf.man ${mandir}/man5/whoson.conf.5
--	${INSTALL} ${srcdir}/whosond.man ${mandir}/man8/whosond.8
--	${INSTALL} ${srcdir}/whoson.man ${mandir}/man3/whoson.3
--	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_login.3 || true
--	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_logout.3 || true
--	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_query.3 || true
--	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_version.3 || true
-+	$(INSTALL) -d $(DESTDIR)$(mandir)/man8 $(DESTDIR)$(mandir)/man5 \
-+		$(DESTDIR)$(mandir)/man3
-+	$(INSTALL) $(srcdir)/whoson.conf.man $(DESTDIR)$(mandir)/man5/whoson.conf.5
-+	$(INSTALL) $(srcdir)/whosond.man $(DESTDIR)$(mandir)/man8/whosond.8
-+	$(INSTALL) $(srcdir)/whoson.man $(DESTDIR)$(mandir)/man3/whoson.3
-+	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_login.3
-+	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_logout.3
-+	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_query.3
-+	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_version.3
+ AC_DEFUN(AM_INIT_AUTOMAKE,
+ [AC_REQUIRE([AC_PROG_INSTALL])
++dnl We require 2.13 because we rely on SHELL being computed by configure.
++AC_PREREQ([2.13])
+ PACKAGE=[$1]
+ AC_SUBST(PACKAGE)
+ VERSION=[$2]
+@@ -172,7 +174,12 @@
+ dnl
  
- install-wtest: wtest
--	${INSTALL} wtest ${bindir}
-+	$(INSTALL) wtest $(DESTDIR)$(bindir)
+ # Check for any special flags to pass to ltconfig.
+-libtool_flags="--cache-file=$cache_file"
++#
++# the following will cause an existing older ltconfig to fail, so
++# we ignore this at the expense of the cache file... Checking this 
++# will just take longer ... bummer!
++#libtool_flags="--cache-file=$cache_file"
++#
+ test "$enable_shared" = no && libtool_flags="$libtool_flags --disable-shared"
+ test "$enable_static" = no && libtool_flags="$libtool_flags --disable-static"
+ test "$enable_fast_install" = no && libtool_flags="$libtool_flags --disable-fast-install"
+diff -Nru whoson-1.09/config.h.in whoson-1.09.new/config.h.in
+--- whoson-1.09/config.h.in	Tue Jul 27 18:44:18 1999
++++ whoson-1.09.new/config.h.in	Tue Aug 31 17:46:43 1999
+@@ -15,9 +15,6 @@
+ /* Define to `int' if <sys/types.h> doesn't define.  */
+ #undef uid_t
  
- clean:
- 	rm -f *.o config.log *.bak
+-/* Default config file path */
+-#undef DEFAULT_CONFIG
+-
+  
+ /* Length of unix domain socket path */
+ #undef UNIX_PATH_MAX
+diff -Nru whoson-1.09/configure.in whoson-1.09.new/configure.in
+--- whoson-1.09/configure.in	Tue Aug 31 18:18:04 1999
++++ whoson-1.09.new/configure.in	Tue Aug 31 16:59:53 1999
+@@ -48,15 +48,6 @@
+ 	CFLAGS="$CFLAGS -Wall"
+ fi
+ 
+-AC_ARG_WITH(config, [  --with-config=LOC       location for the config file (default /etc/whoson.conf)],
+-        use_config=1)
+-if test "X$with_config" != "Xno" && test "X$with_config" != "Xyes" && test "X$with_config" != "X"; then
+-	DEFAULT_CONFIG=$with_config
+-fi
+-: ${DEFAULT_CONFIG=/etc/whoson.conf}
+-AC_SUBST(DEFAULT_CONFIG)dnl
+-AC_DEFINE_UNQUOTED(DEFAULT_CONFIG,"$DEFAULT_CONFIG")dnl
+-
+ AC_MSG_RESULT([** Using C compiler: $CC])
+ AC_MSG_RESULT([** Using CFLAGS:     $CFLAGS])
+ AC_MSG_RESULT([** Using config:     $DEFAULT_CONFIG])
+diff -Nru whoson-1.09/wso_login.3 whoson-1.09.new/wso_login.3
+--- whoson-1.09/wso_login.3	Thu Jan  1 01:00:00 1970
++++ whoson-1.09.new/wso_login.3	Tue Aug 31 16:59:53 1999
+@@ -0,0 +1 @@
++.so whoson.3
+diff -Nru whoson-1.09/wso_logout.3 whoson-1.09.new/wso_logout.3
+--- whoson-1.09/wso_logout.3	Thu Jan  1 01:00:00 1970
++++ whoson-1.09.new/wso_logout.3	Tue Aug 31 16:59:53 1999
+@@ -0,0 +1 @@
++.so whoson.3
+diff -Nru whoson-1.09/wso_query.3 whoson-1.09.new/wso_query.3
+--- whoson-1.09/wso_query.3	Thu Jan  1 01:00:00 1970
++++ whoson-1.09.new/wso_query.3	Tue Aug 31 16:59:53 1999
+@@ -0,0 +1 @@
++.so whoson.3
+diff -Nru whoson-1.09/wso_version.3 whoson-1.09.new/wso_version.3
+--- whoson-1.09/wso_version.3	Thu Jan  1 01:00:00 1970
++++ whoson-1.09.new/wso_version.3	Tue Aug 31 16:59:53 1999
+@@ -0,0 +1 @@
++.so whoson.3
