@@ -76,7 +76,7 @@ automake -a -c
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/run/whoson.{s,d}}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
@@ -114,6 +114,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(754,root,root) /etc/rc.d/init.d/whosond
 %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
+%dir /var/run/whoson.s
+%dir /var/run/whoson.d
 
 %files devel
 %defattr(644,root,root,755)
