@@ -60,7 +60,7 @@ make \
 make prefix=$RPM_BUILD_ROOT/usr install-man
 
 strip       $RPM_BUILD_ROOT/usr/sbin/*
-bzip2 -9    $RPM_BUILD_ROOT/usr/man/man{3,5,8}/* README whoson.txt
+bzip2 -9    $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
 
 cat  << EOF > $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 #!/bin/bash
@@ -132,7 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /usr/sbin/*
 %attr(700,root,root) %config /etc/rc.d/init.d/whosond
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
-%attr(644,root, man) /usr/man/man[58]/*
+%attr(644,root, man) %{_mandir}/man[58]/*
 
 %files devel
 %attr(644,root,root) /usr/lib/*
