@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.00
-Release:	1
+Release:	2
 Group:		Networking
 Group(pl):	Sieciowe
 Copyright:	Public domain
@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(754,root,root) /etc/rc.d/init.d/whosond
-%attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
+%attr(644,root,root) %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files devel
