@@ -1,0 +1,80 @@
+diff -Nru whoson-1.08/Makefile.in whoson-1.08.new/Makefile.in
+--- whoson-1.08/Makefile.in	Thu Jun  3 00:33:06 1999
++++ whoson-1.08.new/Makefile.in	Fri Jun 25 21:18:52 1999
+@@ -86,48 +86,52 @@
+ CLNTOBJS = clnt_tcp.o clnt_unix.o clnt_unixd.o clnt_udp.o
+ 
+ .c.o:
+-	${CC} ${CPPFLAGS} ${INCLUDES} ${DEFS} -c $<
++	$(CC) $(CFLAGS) $(INCLUDES) $(DEFS) -c $<
+ 
+ all: whosond libwhoson.a wtest
+ 
+-whosond: whosond.o mainloop.o rtconfig.o servlist.o ${SERVOBJS} \
++whosond: whosond.o mainloop.o rtconfig.o servlist.o $(SERVOBJS) \
+ 		serv_common.o lhash.o checkperm.o
+-	${CC} ${LDFLAGS} -o whosond whosond.o mainloop.o rtconfig.o \
+-		servlist.o ${SERVOBJS} serv_common.o lhash.o checkperm.o \
+-		${LIBS}
++	$(CC) $(LDFLAGS) -o whosond whosond.o mainloop.o rtconfig.o \
++		servlist.o $(SERVOBJS) serv_common.o lhash.o checkperm.o \
++		$(LIBS)
+ 
+-libwhoson.a: clnt_common.o rtconfig.o clntlist.o ${CLNTOBJS} checkperm.o
+-	${AR} r libwhoson.a clnt_common.o rtconfig.o clntlist.o ${CLNTOBJS} \
++libwhoson.a: clnt_common.o rtconfig.o clntlist.o $(CLNTOBJS) checkperm.o
++	$(AR) r libwhoson.a clnt_common.o rtconfig.o clntlist.o $(CLNTOBJS) \
+ 		checkperm.o
+-	${RANLIB} libwhoson.a
++	$(RANLIB) libwhoson.a
+ 
+ wtest: wtest.o libwhoson.a
+-	${CC} ${LDFLAGS} -o wtest wtest.o -L. -lwhoson ${LIBS}
++	$(CC) $(LDFLAGS) -o wtest wtest.o -L. -lwhoson $(LIBS)
+ 
+ whoson.txt: whoson.ms
+-	${NROFF} -ms ${srcdir}/whoson.ms | ${PERL} ${srcdir}/fix.pl >whoson.txt
++	$(NROFF) -ms $(srcdir)/whoson.ms | $(PERL) $(srcdir)/fix.pl >whoson.txt
+ 
+ install: all
+-	${INSTALL} whosond ${sbindir}
+-	${INSTALL} libwhoson.a ${libdir}
+-	${INSTALL} ${srcdir}/whoson.h ${includedir}
+-	if [ ! -f ${config} ]; then \
+-		${INSTALL} ${srcdir}/whoson.conf ${config} ; \
++	$(INSTALL) -d $(DESTDIR)$(sbindir) $(DESTDIR)$(libdir) \
++		$(DESTDIR)$(includedir) $(DESTDIR)$(config)
++	$(INSTALL) whosond $(DESTDIR)$(sbindir)
++	$(INSTALL) libwhoson.a $(DESTDIR)$(libdir)
++	$(INSTALL) $(srcdir)/whoson.h $(DESTDIR)$(includedir)
++	if [ ! -f $(config) ]; then \
++		$(INSTALL) $(srcdir)/whoson.conf $(DESTDIR)$(config) ; \
+ 	else \
+-		${ECHO} "whoson.conf not replaced" ; \
++		$(ECHO) "whoson.conf not replaced" ; \
+ 	fi
+ 
+ install-man:
+-	${INSTALL} ${srcdir}/whoson.conf.man ${mandir}/man5/whoson.conf.5
+-	${INSTALL} ${srcdir}/whosond.man ${mandir}/man8/whosond.8
+-	${INSTALL} ${srcdir}/whoson.man ${mandir}/man3/whoson.3
+-	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_login.3 || true
+-	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_logout.3 || true
+-	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_query.3 || true
+-	${LN} ${mandir}/man3/whoson.3 ${mandir}/man3/wso_version.3 || true
++	$(INSTALL) -d $(DESTDIR)$(mandir)/man8 $(DESTDIR)$(mandir)/man5 \
++		$(DESTDIR)$(mandir)/man3
++	$(INSTALL) $(srcdir)/whoson.conf.man $(DESTDIR)$(mandir)/man5/whoson.conf.5
++	$(INSTALL) $(srcdir)/whosond.man $(DESTDIR)$(mandir)/man8/whosond.8
++	$(INSTALL) $(srcdir)/whoson.man $(DESTDIR)$(mandir)/man3/whoson.3
++	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_login.3
++	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_logout.3
++	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_query.3
++	echo ".so whoson.3" > $(DESTDIR)$(mandir)/man3/wso_version.3
+ 
+ install-wtest: wtest
+-	${INSTALL} wtest ${bindir}
++	$(INSTALL) wtest $(DESTDIR)$(bindir)
+ 
+ clean:
+ 	rm -f *.o config.log *.bak
