@@ -1,8 +1,8 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	1.08
-Release:	2
+Version:	1.09
+Release:	1
 Group:		Networking
 Group(pl):	Sieciowe
 Copyright:	Public domain
@@ -11,6 +11,9 @@ Source1:	whoson.init
 Patch0:		whoson-config.patch
 Patch1:		whoson-autoconf.patch
 BuildRoot:	/tmp/%{name}-%{version}-root
+
+%define		_libexecdir	%{_sbindir}
+%define		_sysconfigdir	/etc
 
 %description
 Simple method for Internet server programs to know if a particular
@@ -23,42 +26,62 @@ innym programom na ¶ledzenie dynamicznie przydzielanych IP u¿ywanych
 przez znanych (zaufanych) u¿ytkoników.
 
 %package devel
-Summary:	Static library and header file for whoson
-Summary(pl):	Plik nag³ówkowy i biblioteka statyczna dla whoson-a
+Summary:	Header files and development docomentation for whoson
+Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
 Group:		Development/Libraries
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
 This is whoson development package.
-It includes static library and header file.
+It includes files and development docomentation for whoson.
 
 %description -l pl devel
-To jest pakiet dla developerów.
-Zawiera plik nag³ówkowy i bibliotekê statyczn± whoson-a.
+To jest pakiet dla programistów.
+Zawiera pliki nag³ówkowe i dokumentacja do whoson-a.
 
+%package static
+Summary:	Static whoson library
+Summary(pl):	Biblioteka statyczna whoson-a
+Group:		Development/Libraries
+Group(pl):	Programowanie/Biblioteki
+Requires:	%{name}-devel = %{version}
+
+%description devel
+Static whoson library.
+
+%description -l pl static
+Biblioteka statyczna whoson-a.
 %prep
 %setup  -q
 %patch0 -p1
 %patch1 -p1
 
 %build
+autoheader
+aclocal
+autoconf
+automake
 LDFLAGS="-s"; export LDFLAGS
-%configure \
-	--with-config="/etc/whoson.conf"
+%configure
+
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-make install install-man DESTDIR=$RPM_BUILD_ROOT
-
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
+make install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 
+strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
+
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man?/* \
+	README whoson.txt
+
 %post
+/sbin/ldconfig
 /sbin/chkconfig --add whosond
 if test -r /var/run/whosond.pid; then
 	/etc/rc.d/init.d/whosond restart 2> /dev/null
@@ -72,18 +95,26 @@ if [ "$1" = "0" ]; then
 	/etc/rc.d/init.d/whosond stop 2> /dev/null
 fi
 
+%posrun -p /sbin/ldconfig
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc *.gz
+%attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(754,root,root) /etc/rc.d/init.d/whosond
-%attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
+%attr(640,root,root) %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/*
+%attr(755,root,root) %{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/lib*.la
 %{_includedir}/*
+%{_mandir}/man3/*
+
+%files static
+%attr(644,root,root)  %{_libdir}/lib*.a
