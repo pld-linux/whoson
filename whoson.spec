@@ -115,8 +115,8 @@ EOF
 %post
 /sbin/chkconfig --add whosond
 if test -r /var/run/whosond.pid; then
-	/etc/rc.d/init.d/whosond stop >&2
-	/etc/rc.d/init.d/whosond start >&2
+	/etc/rc.d/init.d/whosond stop 2> /dev/null
+	/etc/rc.d/init.d/whosond start 2> /dev/null
 else
 	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
 fi
@@ -124,7 +124,7 @@ fi
 %preun
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del whosond
-	/etc/rc.d/init.d/whosond stop >&2
+	/etc/rc.d/init.d/whosond stop 2> /dev/null
 fi
 
 %clean
