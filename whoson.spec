@@ -86,8 +86,8 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man?/* \
 %post
 /sbin/ldconfig
 /sbin/chkconfig --add whosond
-if test -r /var/run/whosond.pid; then
-	/etc/rc.d/init.d/whosond restart 2> /dev/null
+if [ -f /var/lock/subsys/whosond ]; then
+	/etc/rc.d/init.d/whosond restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
 fi
@@ -95,10 +95,12 @@ fi
 %preun
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del whosond
-	/etc/rc.d/init.d/whosond stop 2> /dev/null
+	if [ -f /var/lock/subsys/whosond ]; then
+		/etc/rc.d/init.d/whosond stop >&2
+	fi
 fi
 
-%posrun -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 %clean
 rm -rf $RPM_BUILD_ROOT
