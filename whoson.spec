@@ -1,7 +1,7 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	1.09
+Version:	2.00
 Release:	1
 Group:		Networking
 Group(pl):	Sieciowe
@@ -22,29 +22,31 @@ Simple method for Internet server programs to know if a particular
 (trusted) user and, optionally, the identity of the said user.
 
 %description -l pl
-Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON pozwalaj±cego
-innym programom na ¶ledzenie dynamicznie przydzielanych IP u¿ywanych
-przez znanych (zaufanych) u¿ytkoników.
+Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON
+pozwalaj±cego innym programom na ¶ledzenie dynamicznie przydzielanych
+IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
 
 %package devel
 Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
 
 %description devel
-This is whoson development package.
-It includes files and development docomentation for whoson.
+This is whoson development package. It includes files and development
+docomentation for whoson.
 
 %description -l pl devel
-To jest pakiet dla programistów.
-Zawiera pliki nag³ówkowe i dokumentacja do whoson-a.
+To jest pakiet dla programistów. Zawiera pliki nag³ówkowe i
+dokumentacja do whoson-a.
 
 %package static
 Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whoson-a
 Group:		Development/Libraries
+Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 
@@ -118,4 +120,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 
 %files static
-%attr(644,root,root)  %{_libdir}/lib*.a
+%defattr(644,root,root,755)
+%{_libdir}/lib*.a
