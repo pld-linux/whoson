@@ -4,7 +4,7 @@ Name:		whoson
 Version:	2.02a
 Release:	2
 Group:		Networking
-License:	Public domain
+License:	Public Domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
