@@ -1,7 +1,7 @@
 diff -Nru whoson-1.09/Makefile.am whoson-1.09.new/Makefile.am
---- whoson-1.09/Makefile.am	Tue Aug 31 18:18:04 1999
-+++ whoson-1.09.new/Makefile.am	Tue Aug 31 18:15:43 1999
-@@ -13,55 +13,53 @@
+--- whoson-1.09/Makefile.am	Tue Aug 31 19:11:36 1999
++++ whoson-1.09.new/Makefile.am	Tue Aug 31 19:12:14 1999
+@@ -13,55 +13,54 @@
  CLNTSOURCES = clnt_tcp.c clnt_unix.c clnt_unixd.c clnt_udp.c
  SERVSOURCES = serv_tcp.c serv_unix.c serv_unixd.c serv_udp.c
  
@@ -61,6 +61,7 @@ diff -Nru whoson-1.09/Makefile.am whoson-1.09.new/Makefile.am
 +libwhosoninclude_HEADERS =	whoson.h
  
  install-data-hook:
++	$(mkinstalldirs) $(DESTDIR)$(sysconfdir)
  	if test -f $(DEFAULT_CONFIG); then \
 -		$(ECHO) "$(DEFAULT_CONFIG) exists, not overwritten"; \
 +		$(ECHO) "$(DESTDIR)$(DEFAULT_CONFIG) exists, not overwritten"; \
@@ -84,8 +85,8 @@ diff -Nru whoson-1.09/Makefile.am whoson-1.09.new/Makefile.am
  whoson.txt: whoson.ms
  	${NROFF} -ms ${srcdir}/whoson.ms | ${PERL} ${srcdir}/fix.pl >whoson.txt
 diff -Nru whoson-1.09/aclocal.m4 whoson-1.09.new/aclocal.m4
---- whoson-1.09/aclocal.m4	Mon Aug 30 15:56:18 1999
-+++ whoson-1.09.new/aclocal.m4	Tue Aug 31 17:46:43 1999
+--- whoson-1.09/aclocal.m4	Tue Aug 31 19:11:36 1999
++++ whoson-1.09.new/aclocal.m4	Tue Aug 31 19:10:46 1999
 @@ -1,4 +1,4 @@
 -dnl aclocal.m4 generated automatically by aclocal 1.4
 +dnl aclocal.m4 generated automatically by aclocal 1.4a
@@ -116,8 +117,8 @@ diff -Nru whoson-1.09/aclocal.m4 whoson-1.09.new/aclocal.m4
  test "$enable_static" = no && libtool_flags="$libtool_flags --disable-static"
  test "$enable_fast_install" = no && libtool_flags="$libtool_flags --disable-fast-install"
 diff -Nru whoson-1.09/config.h.in whoson-1.09.new/config.h.in
---- whoson-1.09/config.h.in	Tue Jul 27 18:44:18 1999
-+++ whoson-1.09.new/config.h.in	Tue Aug 31 17:46:43 1999
+--- whoson-1.09/config.h.in	Tue Aug 31 19:11:36 1999
++++ whoson-1.09.new/config.h.in	Tue Aug 31 19:10:46 1999
 @@ -15,9 +15,6 @@
  /* Define to `int' if <sys/types.h> doesn't define.  */
  #undef uid_t
@@ -129,8 +130,8 @@ diff -Nru whoson-1.09/config.h.in whoson-1.09.new/config.h.in
  /* Length of unix domain socket path */
  #undef UNIX_PATH_MAX
 diff -Nru whoson-1.09/configure.in whoson-1.09.new/configure.in
---- whoson-1.09/configure.in	Tue Aug 31 18:18:04 1999
-+++ whoson-1.09.new/configure.in	Tue Aug 31 16:59:53 1999
+--- whoson-1.09/configure.in	Tue Aug 31 19:11:36 1999
++++ whoson-1.09.new/configure.in	Tue Aug 31 19:10:46 1999
 @@ -48,15 +48,6 @@
  	CFLAGS="$CFLAGS -Wall"
  fi
@@ -149,21 +150,21 @@ diff -Nru whoson-1.09/configure.in whoson-1.09.new/configure.in
  AC_MSG_RESULT([** Using config:     $DEFAULT_CONFIG])
 diff -Nru whoson-1.09/wso_login.3 whoson-1.09.new/wso_login.3
 --- whoson-1.09/wso_login.3	Thu Jan  1 01:00:00 1970
-+++ whoson-1.09.new/wso_login.3	Tue Aug 31 16:59:53 1999
++++ whoson-1.09.new/wso_login.3	Tue Aug 31 19:10:46 1999
 @@ -0,0 +1 @@
 +.so whoson.3
 diff -Nru whoson-1.09/wso_logout.3 whoson-1.09.new/wso_logout.3
 --- whoson-1.09/wso_logout.3	Thu Jan  1 01:00:00 1970
-+++ whoson-1.09.new/wso_logout.3	Tue Aug 31 16:59:53 1999
++++ whoson-1.09.new/wso_logout.3	Tue Aug 31 19:10:46 1999
 @@ -0,0 +1 @@
 +.so whoson.3
 diff -Nru whoson-1.09/wso_query.3 whoson-1.09.new/wso_query.3
 --- whoson-1.09/wso_query.3	Thu Jan  1 01:00:00 1970
-+++ whoson-1.09.new/wso_query.3	Tue Aug 31 16:59:53 1999
++++ whoson-1.09.new/wso_query.3	Tue Aug 31 19:10:46 1999
 @@ -0,0 +1 @@
 +.so whoson.3
 diff -Nru whoson-1.09/wso_version.3 whoson-1.09.new/wso_version.3
 --- whoson-1.09/wso_version.3	Thu Jan  1 01:00:00 1970
-+++ whoson-1.09.new/wso_version.3	Tue Aug 31 16:59:53 1999
++++ whoson-1.09.new/wso_version.3	Tue Aug 31 19:10:46 1999
 @@ -0,0 +1 @@
 +.so whoson.3
