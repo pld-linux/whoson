@@ -4,10 +4,6 @@ Name:		whoson
 Version:	2.02a
 Release:	2
 Group:		Networking
-Group(de):	Netzwerkwesen
-Group(es):	Red
-Group(pl):	Sieciowe
-Group(pt_BR):	Rede
 License:	Public domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
@@ -34,8 +30,6 @@ IP u©ywanych przez znanych (zaufanych) u©ytkonikСw.
 Summary:	Whoson server binary and scripts
 Summary(pl):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Requires:	whoson
 
 %description server
@@ -48,13 +42,6 @@ Plik binarny i skrypty serwera whoson.
 Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nagЁСwkowe i dokumentacja dla dla programistСw do whoson-a
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name} = %{version}
 
 %description devel
@@ -69,13 +56,6 @@ dokumentacja do whoson-a.
 Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whoson-a
 Group:		Development/Libraries
-Group(de):	Entwicklung/Libraries
-Group(es):	Desarrollo/Bibliotecas
-Group(fr):	Development/Librairies
-Group(pl):	Programowanie/Biblioteki
-Group(pt_BR):	Desenvolvimento/Bibliotecas
-Group(ru):	Разработка/Библиотеки
-Group(uk):	Розробка/Б╕бл╕отеки
 Requires:	%{name}-devel = %{version}
 
 %description static
