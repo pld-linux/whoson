@@ -13,6 +13,7 @@ Patch0:		%{name}-config.patch
 Patch1:		%{name}-autoconf.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libtool
 Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -66,11 +67,12 @@ Biblioteka statyczna whoson-a.
 # %patch1 -p1
 
 %build
-# autoheader
-# aclocal
-# autoconf
-# automake -a -c
-%configure2_13
+libtoolize -c -f
+autoheader
+aclocal
+autoconf
+automake -a -c
+%configure
 
 %{__make}
 
