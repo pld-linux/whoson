@@ -90,13 +90,11 @@ case "\$1" in
   start)
 	show "Starting whosond: "
 	daemon whosond
-	echo
 	touch /var/lock/subsys/whosond
 	;;
   stop)
 	show "Stopping whosond services: "
 	killproc whosond
-	echo
 	rm -f /var/lock/subsys/whosond
 	;;
   status)
