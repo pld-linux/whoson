@@ -59,7 +59,7 @@ make \
 
 make prefix=$RPM_BUILD_ROOT/usr install-man
 
-strip       $RPM_BUILD_ROOT/usr/sbin/*
+strip       $RPM_BUILD_ROOT%{_sbindir}/*
 bzip2 -9    $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
 
 cat  << EOF > $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
@@ -83,7 +83,7 @@ then
 	exit 0
 fi
 
-[ -f /usr/sbin/whosond ] || exit 0
+[ -f %{_sbindir}/whosond ] || exit 0
 
 # See how we were called.
 case "\$1" in
@@ -129,14 +129,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README.bz2 whoson.txt.bz2
 
-%attr(755,root,root) /usr/sbin/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(700,root,root) %config /etc/rc.d/init.d/whosond
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
 %{_mandir}/man[58]/*
 
 %files devel
 %attr(644,root,root) %{_libdir}/*
-%attr(644,root,root) /usr/include/*
+%attr(644,root,root) %{_includedir}/*
 
 %changelog
 * Tue Jan 19 1999 Arkadiusz Mi¶kiewicz <misiek@misiek.eu.org>
