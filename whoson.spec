@@ -65,7 +65,6 @@ autoheader
 aclocal
 autoconf
 automake
-LDFLAGS="-s"; export LDFLAGS
 %configure
 
 %{__make}
@@ -78,10 +77,7 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
-
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man?/* \
-	README whoson.txt
+gzip -9nf README whoson.txt
 
 %post
 /sbin/ldconfig
