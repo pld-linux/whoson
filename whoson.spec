@@ -132,7 +132,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /usr/sbin/*
 %attr(700,root,root) %config /etc/rc.d/init.d/whosond
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
-%attr(644,root, man) %{_mandir}/man[58]/*
+%{_mandir}/man[58]/*
 
 %files devel
 %attr(644,root,root) /usr/lib/*
