@@ -6,6 +6,7 @@ Release:	2
 Group:		Networking
 License:	Public Domain
 Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
+# Source0-md5: fe3d8399b7fcb9bf0565099dd954d383
 Source1:	%{name}.init
 Source2:	%{name}.conf
 BuildRequires:	autoconf
