@@ -1,19 +1,20 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	2.00
+Version:	2.02a
 Release:	2
 Group:		Networking
 Group(de):	Netzwerkwesen
+Group(es):	Red
 Group(pl):	Sieciowe
-Copyright:	Public domain
-Source0:	ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
+Group(pt_BR):	Rede
+License:	Public domain
+Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
-Patch0:		%{name}-config.patch
-Patch1:		%{name}-autoconf.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
+Source2:	%{name}.conf
 Prereq:		rc-scripts
+BuildRequires:	autoconf
+Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -29,13 +30,31 @@ Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON
 pozwalaj±cego innym programom na ¶ledzenie dynamicznie przydzielanych
 IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
 
+%package server
+Summary:	Whoson server binary and scripts
+Summary(pl):	Plik binarny i skrypty serwera whoson
+Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
+Group(pl):	Sieciowe/Serwery
+Requires:	whoson
+
+%description server
+Whoson server binary and scripts.
+
+%description -l pl server
+Plik binarny i skrypty serwera whoson.
+
 %package devel
 Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name} = %{version}
 
 %description devel
@@ -51,41 +70,52 @@ Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whoson-a
 Group:		Development/Libraries
 Group(de):	Entwicklung/Libraries
+Group(es):	Desarrollo/Bibliotecas
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
+Group(pt_BR):	Desenvolvimento/Bibliotecas
+Group(ru):	òÁÚÒÁÂÏÔËÁ/âÉÂÌÉÏÔÅËÉ
+Group(uk):	òÏÚÒÏÂËÁ/â¦ÂÌ¦ÏÔÅËÉ
 Requires:	%{name}-devel = %{version}
 
-%description devel
+%description static
 Static whoson library.
 
 %description -l pl static
 Biblioteka statyczna whoson-a.
+
 %prep
 %setup  -q
-%patch0 -p1
-%patch1 -p1
 
 %build
-autoheader
-aclocal
 autoconf
-automake -a -c
 %configure
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/run/whoson.{s,d}}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/lib/whosond}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
+
+for i in wso_login wso_logout wso_query wso_version; do
+	rm -f $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
+	echo ".so whoson.3" > $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
+done
 
 gzip -9nf README whoson.txt
 
-%post
-/sbin/ldconfig
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post   -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+%post server
 /sbin/chkconfig --add whosond
 if [ -f /var/lock/subsys/whosond ]; then
 	/etc/rc.d/init.d/whosond restart >&2
@@ -93,30 +123,27 @@ else
 	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
 fi
 
-%preun
+%preun server
 if [ "$1" = "0" ]; then
-	/sbin/chkconfig --del whosond
 	if [ -f /var/lock/subsys/whosond ]; then
 		/etc/rc.d/init.d/whosond stop >&2
 	fi
+	/sbin/chkconfig --del whosond
 fi
-
-%postun -p /sbin/ldconfig
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc *.gz
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(754,root,root) /etc/rc.d/init.d/whosond
 %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
-%dir /var/run/whoson.s
-%dir /var/run/whoson.d
 
+%files server
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/whosond
+%attr(754,root,root) /etc/rc.d/init.d/whosond
+%dir /var/lib/whosond
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
