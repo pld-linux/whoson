@@ -109,8 +109,10 @@ gzip -9nf README whoson.txt
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post   -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
 %post server
-/sbin/ldconfig
 /sbin/chkconfig --add whosond
 if [ -f /var/lock/subsys/whosond ]; then
 	/etc/rc.d/init.d/whosond restart >&2
@@ -125,8 +127,6 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del whosond
 fi
-
-%postun -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
