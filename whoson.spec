@@ -44,7 +44,7 @@ Zawiera plik nag³ówkowy i bibliotekê statyczn± whoson-a.
 %build
 LDFLAGS="-s"; export LDFLAGS
 %configure \
-	--with-config="/etc"
+	--with-config="/etc/whoson.conf"
 make
 
 %install

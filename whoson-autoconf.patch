@@ -43,11 +43,11 @@ diff -Nru whoson-1.08/Makefile.in whoson-1.08.new/Makefile.in
 -	if [ ! -f ${config} ]; then \
 -		${INSTALL} ${srcdir}/whoson.conf ${config} ; \
 +	$(INSTALL) -d $(DESTDIR)$(sbindir) $(DESTDIR)$(libdir) \
-+		$(DESTDIR)$(includedir) $(DESTDIR)$(config)
++		$(DESTDIR)$(includedir) $(DESTDIR)/etc
 +	$(INSTALL) whosond $(DESTDIR)$(sbindir)
 +	$(INSTALL) libwhoson.a $(DESTDIR)$(libdir)
 +	$(INSTALL) $(srcdir)/whoson.h $(DESTDIR)$(includedir)
-+	if [ ! -f $(config) ]; then \
++	if [ ! -f $(DESTDIR)$(config) ]; then \
 +		$(INSTALL) $(srcdir)/whoson.conf $(DESTDIR)$(config) ; \
  	else \
 -		${ECHO} "whoson.conf not replaced" ; \
