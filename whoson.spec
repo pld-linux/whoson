@@ -136,15 +136,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/*
 %{_includedir}/*
-
-%changelog
-* Fri May 21 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
-  [1.07-1]
-- now package is FHS 2.0 compliant,
-- gzipping %doc instaead bzippng2,
-- standarized %post/%preun (restart service on upgrade, stop service on
-  removing package).
-
-* Tue Jan 19 1999 Arkadiusz Mi¶kiewicz <misiek@misiek.eu.org>
-  [1.06-1d]
-- inital rpm release
