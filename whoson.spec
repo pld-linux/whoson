@@ -35,7 +35,7 @@ Requires:	whoson
 %description server
 Whoson server binary and scripts.
 
-%description -l pl server
+%description server -l pl
 Plik binarny i skrypty serwera whoson.
 
 %package devel
@@ -48,7 +48,7 @@ Requires:	%{name} = %{version}
 This is whoson development package. It includes files and development
 docomentation for whoson.
 
-%description -l pl devel
+%description devel -l pl
 To jest pakiet dla programistów. Zawiera pliki nag³ówkowe i
 dokumentacja do whoson-a.
 
@@ -61,7 +61,7 @@ Requires:	%{name}-devel = %{version}
 %description static
 Static whoson library.
 
-%description -l pl static
+%description static -l pl
 Biblioteka statyczna whoson-a.
 
 %prep
