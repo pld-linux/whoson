@@ -1,7 +1,7 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	2.02
+Version:	2.02a
 Release:	1
 Group:		Networking
 Group(de):	Netzwerkwesen
@@ -97,7 +97,7 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/lib/whosond}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
@@ -140,7 +140,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/whosond
 %attr(754,root,root) /etc/rc.d/init.d/whosond
-
+%dir /var/lib/whosond
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
