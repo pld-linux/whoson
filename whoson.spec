@@ -1,14 +1,14 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
-Name:		whoson
-Version:	1.06
-Release:	1d
-Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
-Patch0:		%{name}.config.diff
-Copyright:	Public domain
-Group:		Networking
-Group(pl):	Sieci	
-BuildRoot:	/tmp/buildroot-%{name}-%{version}
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
+Name:		whoson
+Version:	1.07
+Release:	1
+Group:		Networking
+Group(pl):	Sieci
+Copyright:	Public domain
+Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
+Patch0:		whoson-config.patch
+BuildRoot:	/tmp/buildroot-%{name}-%{version}
 
 %description
 Simple method for Internet server programs to know if a particular
@@ -40,27 +40,27 @@ Zawiera plik nag³ówkowy i bibliotekê statyczn± whoson-a.
 %patch -p1
 
 %build
-CFLAGS=$RPM_OPT_FLAGS \
-    ./configure %{_target} \
-	--prefix=/usr \
+CFLAGS="$RPM_OPT_FLAGS" \
+./configure %{_target} \
+	--prefix=%{_prefix} \
 	--with-config=/etc/whoson.conf
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-install -d $RPM_BUILD_ROOT/usr/{sbin,man/man{5,3,8},include,lib}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
+	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,3,8},%{_includedir},%_{libdir}}
 
-make \
-    prefix=$RPM_BUILD_ROOT/usr \
-    config=$RPM_BUILD_ROOT/etc/whoson.conf \
-    install
+make install \
+	prefix=$RPM_BUILD_ROOT%{_prefix} \
+	config=$RPM_BUILD_ROOT/etc/whoson.conf
 
 make prefix=$RPM_BUILD_ROOT/usr install-man
 
-strip       $RPM_BUILD_ROOT%{_sbindir}/*
-bzip2 -9    $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
+strip $RPM_BUILD_ROOT%{_sbindir}/*
+
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
 
 cat  << EOF > $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 #!/bin/bash
@@ -88,13 +88,13 @@ fi
 # See how we were called.
 case "\$1" in
   start)
-	echo -n "Starting whosond: "
+	show "Starting whosond: "
 	daemon whosond
 	echo
 	touch /var/lock/subsys/whosond
 	;;
   stop)
-	echo -n "Stopping whosond services: "
+	show "Stopping whosond services: "
 	killproc whosond
 	echo
 	rm -f /var/lock/subsys/whosond
@@ -116,10 +116,17 @@ EOF
 
 %post
 /sbin/chkconfig --add whosond
+if test -r /var/run/whosond.pid; then
+	/etc/rc.d/init.d/whosond stop >&2
+	/etc/rc.d/init.d/whosond start >&2
+else
+	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
+fi
 
 %preun
-if [ $1 = 0]; then
-    /sbin/chkconfig --del whosond
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del whosond
+	/etc/rc.d/init.d/whosond stop >&2
 fi
 
 %clean
@@ -130,15 +137,23 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.bz2 whoson.txt.bz2
 
 %attr(755,root,root) %{_sbindir}/*
-%attr(700,root,root) %config /etc/rc.d/init.d/whosond
+%attr(754,root,root) %config /etc/rc.d/init.d/whosond
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
 %{_mandir}/man[58]/*
 
 %files devel
-%attr(644,root,root) %{_libdir}/*
-%attr(644,root,root) %{_includedir}/*
+%defattr(644,root,root,755)
+%{_libdir}/*
+%{_includedir}/*
 
 %changelog
+* Fri May 21 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [1.07-1]
+- now package is FHS 2.0 compliant,
+- gzipping %doc instaead bzippng2,
+- standarized %post/%preun (restart service on upgrade, stop service on
+  removing package).
+
 * Tue Jan 19 1999 Arkadiusz Mi¶kiewicz <misiek@misiek.eu.org>
-[1.06-1d]
+  [1.06-1d]
 - inital rpm release
