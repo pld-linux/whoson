@@ -8,7 +8,7 @@ Group(pl):	Sieci
 Copyright:	Public domain
 Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
 Patch0:		whoson-config.patch
-BuildRoot:	/tmp/buildroot-%{name}-%{version}
+BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
 Simple method for Internet server programs to know if a particular
