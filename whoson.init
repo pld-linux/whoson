@@ -18,10 +18,15 @@
 [ -f /etc/sysconfig/whoson ] && . /etc/sysconfig/whoson
 
 # Check that networking is up.
-if [ "${NETWORKING}" = "no" ]; then
-	echo "WARNING: Networking is down. Whoson service can't be run."
-	exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down whosond
+		exit 1
+	fi
+else
+	exit 0
 fi
+
 
 # See how we were called.
 case "$1" in
@@ -33,50 +38,44 @@ case "$1" in
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/whosond
 	else
-		msg_Already_Running whosond
-		exit 1
-	fi
-        ;;
-  stop)
-        # Stop daemons.
-	if [ -f /var/lock/subsys/whosond ]; then
-		msg_stopping whosond
-		killproc whosond
-		rm -f /var/lock/subsys/whosond >/dev/null 2>&1
-	else
-		msg_Not_Running whosond
-		exit 1
-	fi	
-        ;;
-  restart)
-        $0 stop
-	$0 start
-        ;;
-  reload)
-	if [ -f /var/lock/subsys/whosond ]; then
-		msg_show whosond
-		msg_reload
-		busy
-		killproc whosond -HUP
-		deltext
-		ok		
-	else
-		msg_Not_Running whosond
+		msg_already_running whosond
 		exit 1
 	fi
 	;;
-  force-reload)
-	$0 stop && $0 start
-	exit $?
+  stop)
+	if [ -f /var/lock/subsys/whosond ]; then
+		# Stop daemons.
+		msg_stopping whosond
+		killproc whosond
+		RETVAL=$?
+		rm -f /var/lock/subsys/whosond >/dev/null 2>&1
+	else
+		msg_not_running whosond
+		exit 1
+	fi	
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  reload|force-reload)
+	if [ -f /var/lock/subsys/whosond ]; then
+		msg_reloading whosond
+		killproc whosond -HUP
+		RETVAL=$?
+	else
+		msg_not_running whosond
+		exit 1
+	fi
 	;;
   status)
 	status whosond
 	exit $?
-        ;;
+	;;
   *)
-        # show "Usage: %s {start|stop|status|restart|reload|force-reload}" $0
-	msg_Usage "$0 {start|stop|status|restart|reload|force-reload}"
-        exit 1
+	# show "Usage: %s {start|stop|restart|reload|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 1
 esac
 
 exit $RETVAL
