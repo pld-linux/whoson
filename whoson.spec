@@ -4,12 +4,15 @@ Name:		whoson
 Version:	2.00
 Release:	2
 Group:		Networking
+Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
 Copyright:	Public domain
 Source0:	ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
-Source1:	whoson.init
-Patch0:		whoson-config.patch
-Patch1:		whoson-autoconf.patch
+Source1:	%{name}.init
+Patch0:		%{name}-config.patch
+Patch1:		%{name}-autoconf.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
 Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -30,6 +33,7 @@ IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
 Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name} = %{version}
@@ -46,6 +50,7 @@ dokumentacja do whoson-a.
 Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whoson-a
 Group:		Development/Libraries
+Group(de):	Entwicklung/Libraries
 Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
@@ -64,7 +69,7 @@ Biblioteka statyczna whoson-a.
 autoheader
 aclocal
 autoconf
-automake
+automake -a -c
 %configure
 
 %{__make}
@@ -107,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %attr(754,root,root) /etc/rc.d/init.d/whosond
-%attr(644,root,root) %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
+%config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files devel
