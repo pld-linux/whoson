@@ -87,7 +87,6 @@ for i in wso_login wso_logout wso_query wso_version; do
 	echo ".so whoson.3" > $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
 done
 
-gzip -9nf README whoson.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -113,7 +112,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc README whoson.txt
 %attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
