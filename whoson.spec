@@ -4,7 +4,7 @@ Name:		whoson
 Version:	1.08
 Release:	1
 Group:		Networking
-Group(pl):	Sieci
+Group(pl):	Sieciowe
 Copyright:	Public domain
 Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
 Patch0:		whoson-config.patch
