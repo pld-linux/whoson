@@ -23,7 +23,7 @@ Simple method for Internet server programs to know if a particular
 %description -l pl
 Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON
 pozwalaj±cego innym programom na ¶ledzenie dynamicznie przydzielanych
-IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
+IP u¿ywanych przez znanych (zaufanych) u¿ytkowników.
 
 %package server
 Summary:	Whoson server binary and scripts
