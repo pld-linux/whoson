@@ -27,24 +27,24 @@ fi
 case "$1" in
   start)
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/whoson ]; then
+	if [ ! -f /var/lock/subsys/whosond ]; then
 		msg_starting "whosond"
 		daemon whosond
 		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/whoson
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/whosond
 	else
-		msg_Already_Running whoson
+		msg_Already_Running whosond
 		exit 1
 	fi
         ;;
   stop)
         # Stop daemons.
-	if [ -f /var/lock/subsys/syslogd ]; then
-		msg_stopping whoson
+	if [ -f /var/lock/subsys/whosond ]; then
+		msg_stopping whosond
 		killproc whosond
-		rm -f /var/lock/subsys/whoson >/dev/null 2>&1
+		rm -f /var/lock/subsys/whosond >/dev/null 2>&1
 	else
-		msg_Not_Running whoson
+		msg_Not_Running whosond
 		exit 1
 	fi	
         ;;
@@ -53,15 +53,15 @@ case "$1" in
 	$0 start
         ;;
   reload)
-	if [ -f /var/lock/subsys/whoson ]; then
-		msg_show whoson
+	if [ -f /var/lock/subsys/whosond ]; then
+		msg_show whosond
 		msg_reload
 		busy
 		killproc whosond -HUP
 		deltext
 		ok		
 	else
-		msg_Not_Running whoson
+		msg_Not_Running whosond
 		exit 1
 	fi
 	;;
