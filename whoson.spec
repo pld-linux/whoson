@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.02a
-Release:	1
+Release:	2
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(es):	Red
@@ -12,10 +12,8 @@ License:	Public domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool
 Prereq:		rc-scripts
+BuildRequires:	autoconf
 Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -41,10 +39,10 @@ Group(pl):	Sieciowe/Serwery
 Requires:	whoson
 
 %description server
-Whoson server binary and scripts
+Whoson server binary and scripts.
 
 %description -l pl server
-Plik binarny i skrypty serwera whoson
+Plik binarny i skrypty serwera whoson.
 
 %package devel
 Summary:	Header files and development docomentation for whoson
@@ -103,6 +101,11 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/lib/whosond}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
+
+for i in wso_login wso_logout wso_query wso_version; do
+	rm -f $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
+	echo ".so whoson.3" > $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
+done
 
 gzip -9nf README whoson.txt
 
