@@ -1,22 +1,5 @@
-diff -urN whoson-1.07.orig/whoson.conf whoson-1.07/whoson.conf
---- whoson-1.07.orig/whoson.conf	Mon May 31 20:29:35 1999
-+++ whoson-1.07/whoson.conf	Mon May 31 20:33:08 1999
-@@ -13,13 +13,13 @@
- # stream socket.  "port" is the name of the socket.
- 
- client	unix
--	port=/var/whoson/pipe
-+	port=/var/run/whoson-pipe
- 
- # Connect to the server running on the same machine via a unix domain
- # datagram socket.  "port" is the name of the socket.
- 
- client	unixd
--	port=/var/whoson/piped
-+	port=/var/run/whoson-piped
- 
- # Connect to the server over UDP datagram protocol.  Recommended method.
- # "address" is the IP address of the server, "port" is the port number.
+--- whoson-2.00/whoson.conf.orig	Sun Oct  3 23:18:04 1999
++++ whoson-2.00/whoson.conf	Thu Jul 19 02:56:49 2001
 @@ -36,8 +36,8 @@
  
  # Connect to the server over the TCP protocol.
@@ -28,20 +11,19 @@ diff -urN whoson-1.07.orig/whoson.conf whoson-1.07/whoson.conf
  
  # There may be any number of any type entries.
  # Stream protocols (tcp and unix) allow for persistent connections
-@@ -58,13 +58,13 @@
- server	tcp
+@@ -60,14 +60,14 @@
  	port=9876
+ 	listenq=5
  	keepalive=150
 -	allow=123.45.67.0/24		# Allow the the whole network
 -	deny=123.45.67.89/32		# except these ..
 -	deny=123.45.67.90/32		#		.. two machines
--server	unix port=/var/whoson/pipe keepalive=150
--server	unixd port=/var/whoson/piped
 +	allow=127.0.0.1/24		# Allow the the whole network
 +#	deny=123.45.67.89/32		# except these ..
 +#	deny=123.45.67.90/32		#		.. two machines
-+server	unix port=/var/run/whoson-pipe keepalive=150
-+server	unixd port=/var/run/whoson-piped
+ server	unix port=/var/run/whoson.s keepalive=150
+ 	listenq=5
+ server	unixd port=/var/run/whoson.d
  server	udp port=9876
 -	allow=0.0.0.0/0			# open to the world.  Don't do that!
 +#	allow=0.0.0.0/0			# open to the world.  Don't do that!
