@@ -10,7 +10,7 @@ Source0:	ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
 Source1:	whoson.init
 Patch0:		whoson-config.patch
 Patch1:		whoson-autoconf.patch
-Requires:	rc-scripts
+Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
