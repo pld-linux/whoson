@@ -8,9 +8,8 @@ License:	Public Domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
-Prereq:		rc-scripts
 BuildRequires:	autoconf
-Prereq:		/sbin/chkconfig
+BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -30,7 +29,9 @@ IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
 Summary:	Whoson server binary and scripts
 Summary(pl):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
-Requires:	whoson
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}
 
 %description server
 Whoson server binary and scripts.
@@ -68,11 +69,7 @@ Biblioteka statyczna whoson-a.
 %setup  -q
 
 %build
-
-%ifarch athlon
-	%define _target_platform i686-pld-linux
-%endif
-
+cp -f /usr/share/automake/config.* .
 %{__autoconf}
 %configure
 
@@ -120,7 +117,7 @@ fi
 %doc README whoson.txt
 %attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files server
@@ -128,6 +125,7 @@ fi
 %attr(755,root,root) %{_sbindir}/whosond
 %attr(754,root,root) /etc/rc.d/init.d/whosond
 %dir /var/lib/whosond
+
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/lib*.so
