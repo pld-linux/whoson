@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.01
-Release:	2
+Release:	3
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
@@ -28,6 +28,19 @@ Simple method for Internet server programs to know if a particular
 Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON
 pozwalaj±cego innym programom na ¶ledzenie dynamicznie przydzielanych
 IP u¿ywanych przez znanych (zaufanych) u¿ytkoników.
+
+%package server
+Summary:	Whoson server binary and scripts
+Summary(pl):	Plik binarny i skrypty serwera whoson
+Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
+Group(pl):	Sieciowe/Serwery
+
+%description server
+Whoson server binary and scripts
+
+%description -l pl server
+Plik binarny i skrypty serwera whoson
 
 %package devel
 Summary:	Header files and development docomentation for whoson
@@ -55,7 +68,7 @@ Group(fr):	Development/Librairies
 Group(pl):	Programowanie/Biblioteki
 Requires:	%{name}-devel = %{version}
 
-%description devel
+%description static
 Static whoson library.
 
 %description -l pl static
@@ -85,7 +98,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 
 gzip -9nf README whoson.txt
 
-%post
+%postun -p /sbin/ldconfig
+
+%post server
 /sbin/ldconfig
 /sbin/chkconfig --add whosond
 if [ -f /var/lock/subsys/whosond ]; then
@@ -94,7 +109,7 @@ else
 	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
 fi
 
-%preun
+%preun server
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del whosond
 	if [ -f /var/lock/subsys/whosond ]; then
@@ -102,19 +117,21 @@ if [ "$1" = "0" ]; then
 	fi
 fi
 
-%postun -p /sbin/ldconfig
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
 %doc *.gz
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(754,root,root) /etc/rc.d/init.d/whosond
 %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
+
+%files server
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/whosond
+%attr(754,root,root) /etc/rc.d/init.d/whosond
 
 %files devel
 %defattr(644,root,root,755)
