@@ -68,6 +68,11 @@ Biblioteka statyczna whoson-a.
 %setup  -q
 
 %build
+
+%ifarch athlon
+	%define _target_platform i686-pld-linux
+%endif
+
 %{__autoconf}
 %configure
 
