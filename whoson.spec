@@ -41,7 +41,7 @@ Zawiera plik nag³ówkowy i bibliotekê statyczn± whoson-a.
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" \
-./configure %{_target} \
+./configure %{_target_platform} \
 	--prefix=%{_prefix} \
 	--with-config=/etc/whoson.conf
 make
