@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.01
-Release:	1
+Release:	2
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
@@ -10,7 +10,6 @@ Copyright:	Public domain
 Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Patch0:		%{name}-config.patch
-Patch1:		%{name}-autoconf.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
@@ -64,7 +63,6 @@ Biblioteka statyczna whoson-a.
 %prep
 %setup  -q
 %patch0 -p1
-# %patch1 -p1
 
 %build
 libtoolize -c -f
@@ -117,8 +115,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(754,root,root) /etc/rc.d/init.d/whosond
 %config %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
 %{_mandir}/man[58]/*
-%dir /var/run/whoson.s
-%dir /var/run/whoson.d
 
 %files devel
 %defattr(644,root,root,755)
