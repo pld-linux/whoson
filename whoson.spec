@@ -135,7 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man[58]/*
 
 %files devel
-%attr(644,root,root) /usr/lib/*
+%attr(644,root,root) %{_libdir}/*
 %attr(644,root,root) /usr/include/*
 
 %changelog
