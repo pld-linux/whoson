@@ -1,13 +1,14 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	1.07
+Version:	1.08
 Release:	1
 Group:		Networking
 Group(pl):	Sieci
 Copyright:	Public domain
 Source:		ftp://ftp.average.org/pub/whoson/%{name}-%{version}.tar.gz
 Patch0:		whoson-config.patch
+Patch1:		whoson-autoconf.patch
 BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description
@@ -36,29 +37,22 @@ To jest pakiet dla developerów.
 Zawiera plik nag³ówkowy i bibliotekê statyczn± whoson-a.
 
 %prep
-%setup -q
-%patch -p1
+%setup  -q
+%patch0 -p1
+%patch1 -p1
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" \
-./configure %{_target_platform} \
-	--prefix=%{_prefix} \
-	--with-config=/etc/whoson.conf
+LDFLAGS="-s"; export LDFLAGS
+%configure \
+	--with-config="/etc/whoson.conf"
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
-	$RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man{5,3,8},%{_includedir},%_{libdir}}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-make install \
-	prefix=$RPM_BUILD_ROOT%{_prefix} \
-	config=$RPM_BUILD_ROOT/etc/whoson.conf
-
-make prefix=$RPM_BUILD_ROOT/usr install-man
-
-strip $RPM_BUILD_ROOT%{_sbindir}/*
+make install install-man DESTDIR=$RPM_BUILD_ROOT
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man{3,5,8}/* README whoson.txt
 
@@ -132,10 +126,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.bz2 whoson.txt.bz2
-
+%doc *.gz
 %attr(755,root,root) %{_sbindir}/*
-%attr(754,root,root) %config /etc/rc.d/init.d/whosond
+%attr(754,root,root) /etc/rc.d/init.d/whosond
 %attr(640,root,root) %config %verify(not size mtime md5) /etc/whoson.conf
 %{_mandir}/man[58]/*
 
