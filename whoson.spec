@@ -5,7 +5,7 @@ Version:	2.02a
 Release:	2
 Group:		Networking
 License:	Public Domain
-Source0:	http://prdownloads.sourceforge.net/whoson/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
 BuildRequires:	autoconf
@@ -13,7 +13,6 @@ BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
-%define		_sysconfigdir	/etc
 
 %description
 Simple method for Internet server programs to know if a particular
@@ -41,7 +40,7 @@ Plik binarny i skrypty serwera whoson.
 
 %package devel
 Summary:	Header files and development docomentation for whoson
-Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whoson-a
+Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whosona
 Group:		Development/Libraries
 Requires:	%{name} = %{version}
 
@@ -51,11 +50,11 @@ docomentation for whoson.
 
 %description devel -l pl
 To jest pakiet dla programistów. Zawiera pliki nag³ówkowe i
-dokumentacja do whoson-a.
+dokumentacjê do whosona.
 
 %package static
 Summary:	Static whoson library
-Summary(pl):	Biblioteka statyczna whoson-a
+Summary(pl):	Biblioteka statyczna whosona
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
@@ -63,7 +62,7 @@ Requires:	%{name}-devel = %{version}
 Static whoson library.
 
 %description static -l pl
-Biblioteka statyczna whoson-a.
+Biblioteka statyczna whosona.
 
 %prep
 %setup  -q
@@ -82,13 +81,12 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/lib/whosond}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
 
 for i in wso_login wso_logout wso_query wso_version; do
 	rm -f $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
 	echo ".so whoson.3" > $RPM_BUILD_ROOT%{_mandir}/man3/$i.3
 done
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -117,7 +115,7 @@ fi
 %doc README whoson.txt
 %attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfigdir}/whoson.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files server
