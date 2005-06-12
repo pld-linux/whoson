@@ -9,6 +9,7 @@ Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 # Source0-md5:	9bb91b9e0d5a10574e78aa6647dd7ab9
 Source1:	%{name}.init
 Source2:	%{name}.conf
+URL:		http://whoson.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
