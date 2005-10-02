@@ -32,7 +32,7 @@ Summary(pl):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description server
 Whoson server binary and scripts.
@@ -44,7 +44,7 @@ Plik binarny i skrypty serwera whoson.
 Summary:	Header files and development docomentation for whoson
 Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whosona
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 This is whoson development package. It includes files and development
@@ -58,7 +58,7 @@ dokumentacjê do whosona.
 Summary:	Static whoson library
 Summary(pl):	Biblioteka statyczna whosona
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static whoson library.
@@ -80,7 +80,8 @@ cp -f /usr/share/automake/config.* .
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/lib/whosond}
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/whosond
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
@@ -117,7 +118,7 @@ fi
 %doc README whoson.txt
 %attr(755,root,root) %{_sbindir}/whoson
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/whoson.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/whoson.conf
 %{_mandir}/man[58]/*
 
 %files server
