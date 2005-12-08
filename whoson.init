@@ -49,7 +49,7 @@ case "$1" in
 		rm -f /var/lock/subsys/whosond >/dev/null 2>&1
 	else
 		msg_not_running whosond
-	fi	
+	fi
 	;;
   restart)
 	$0 stop
