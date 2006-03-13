@@ -3,8 +3,8 @@ Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.03
 Release:	1
-Group:		Networking
 License:	Public Domain
+Group:		Networking
 Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
 # Source0-md5:	9bb91b9e0d5a10574e78aa6647dd7ab9
 Source1:	%{name}.init
@@ -12,6 +12,7 @@ Source2:	%{name}.conf
 URL:		http://whoson.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
@@ -30,9 +31,9 @@ IP u¿ywanych przez znanych (zaufanych) u¿ytkowników.
 Summary:	Whoson server binary and scripts
 Summary(pl):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
+Requires:	rc-scripts
 
 %description server
 Whoson server binary and scripts.
@@ -99,17 +100,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post server
 /sbin/chkconfig --add whosond
-if [ -f /var/lock/subsys/whosond ]; then
-	/etc/rc.d/init.d/whosond restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/whosond start\" to start whosond daemon."
-fi
+%service whosond restart "whosond daemon"
 
 %preun server
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/whosond ]; then
-		/etc/rc.d/init.d/whosond stop >&2
-	fi
+	%service whosond stop
 	/sbin/chkconfig --del whosond
 fi
 
