@@ -2,7 +2,7 @@ Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.03
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Networking
 Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
@@ -75,7 +75,7 @@ cp -f /usr/share/automake/config.* .
 %{__autoconf}
 %configure
 
-%{__make}
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
