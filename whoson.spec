@@ -1,5 +1,5 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
-Summary(pl):	Protoko³u ¶ledzenia dynamicznie przydzielanych adresów IP
+Summary(pl.UTF-8):   ProtokoÅ‚u Å›ledzenia dynamicznie przydzielanych adresÃ³w IP
 Name:		whoson
 Version:	2.03
 Release:	2
@@ -22,14 +22,14 @@ Simple method for Internet server programs to know if a particular
 (dynamically allocated) IP address is currently allocated to a known
 (trusted) user and, optionally, the identity of the said user.
 
-%description -l pl
-Program oraz biblioteka bêd±ce implementacj± protoko³u WHOSON
-pozwalaj±cego innym programom na ¶ledzenie dynamicznie przydzielanych
-IP u¿ywanych przez znanych (zaufanych) u¿ytkowników.
+%description -l pl.UTF-8
+Program oraz biblioteka bÄ™dÄ…ce implementacjÄ… protokoÅ‚u WHOSON
+pozwalajÄ…cego innym programom na Å›ledzenie dynamicznie przydzielanych
+IP uÅ¼ywanych przez znanych (zaufanych) uÅ¼ytkownikÃ³w.
 
 %package server
 Summary:	Whoson server binary and scripts
-Summary(pl):	Plik binarny i skrypty serwera whoson
+Summary(pl.UTF-8):   Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -38,12 +38,12 @@ Requires:	rc-scripts
 %description server
 Whoson server binary and scripts.
 
-%description server -l pl
+%description server -l pl.UTF-8
 Plik binarny i skrypty serwera whoson.
 
 %package devel
 Summary:	Header files and development docomentation for whoson
-Summary(pl):	Pliki nag³ówkowe i dokumentacja dla dla programistów do whosona
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe i dokumentacja dla dla programistÃ³w do whosona
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -51,20 +51,20 @@ Requires:	%{name} = %{version}-%{release}
 This is whoson development package. It includes files and development
 docomentation for whoson.
 
-%description devel -l pl
-To jest pakiet dla programistów. Zawiera pliki nag³ówkowe i
-dokumentacjê do whosona.
+%description devel -l pl.UTF-8
+To jest pakiet dla programistÃ³w. Zawiera pliki nagÅ‚Ã³wkowe i
+dokumentacjÄ™ do whosona.
 
 %package static
 Summary:	Static whoson library
-Summary(pl):	Biblioteka statyczna whosona
+Summary(pl.UTF-8):   Biblioteka statyczna whosona
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static whoson library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Biblioteka statyczna whosona.
 
 %prep
