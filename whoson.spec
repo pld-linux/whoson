@@ -1,5 +1,5 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
-Summary(pl.UTF-8):   Protokołu śledzenia dynamicznie przydzielanych adresów IP
+Summary(pl.UTF-8):	Protokołu śledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
 Version:	2.03
 Release:	2
@@ -29,7 +29,7 @@ IP używanych przez znanych (zaufanych) użytkowników.
 
 %package server
 Summary:	Whoson server binary and scripts
-Summary(pl.UTF-8):   Plik binarny i skrypty serwera whoson
+Summary(pl.UTF-8):	Plik binarny i skrypty serwera whoson
 Group:		Networking/Daemons
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -43,7 +43,7 @@ Plik binarny i skrypty serwera whoson.
 
 %package devel
 Summary:	Header files and development docomentation for whoson
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja dla dla programistów do whosona
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja dla dla programistów do whosona
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -57,7 +57,7 @@ dokumentację do whosona.
 
 %package static
 Summary:	Static whoson library
-Summary(pl.UTF-8):   Biblioteka statyczna whosona
+Summary(pl.UTF-8):	Biblioteka statyczna whosona
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
