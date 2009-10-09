@@ -1,12 +1,12 @@
 Summary:	Protocol for Keeping Track of Dynamically Allocated IP
 Summary(pl.UTF-8):	Protokołu śledzenia dynamicznie przydzielanych adresów IP
 Name:		whoson
-Version:	2.04
+Version:	2.05
 Release:	1
 License:	Public Domain
 Group:		Networking
 Source0:	http://dl.sourceforge.net/whoson/%{name}-%{version}.tar.gz
-# Source0-md5:	e74d3484ebb3f002703f81e9e76d51b0
+# Source0-md5:	5c36fbaca0f8a618af2433fc92b3e5b2
 Source1:	%{name}.init
 Source2:	%{name}.conf
 URL:		http://whoson.sourceforge.net/
