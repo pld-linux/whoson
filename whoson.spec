@@ -12,6 +12,7 @@ Source2:	%{name}.conf
 URL:		http://whoson.sourceforge.net/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,8 +72,11 @@ Biblioteka statyczna whosona.
 %setup -q
 
 %build
-cp -f /usr/share/automake/config.* .
+%{__libtoolize}
+%{__aclocal}
 %{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure
 
 %{__make} -j1
@@ -112,24 +116,27 @@ fi
 %defattr(644,root,root,755)
 %doc README whoson.txt
 %attr(755,root,root) %{_sbindir}/whoson
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/lib*.so.0
+%attr(755,root,root) %{_libdir}/libwhoson.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libwhoson.so.0
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/whoson.conf
-%{_mandir}/man[58]/*
+%{_mandir}/man5/whoson.conf.5*
+%{_mandir}/man8/whoson.8*
 
 %files server
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/whosond
 %attr(754,root,root) /etc/rc.d/init.d/whosond
 %dir /var/lib/whosond
+%{_mandir}/man8/whosond.8*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
-%{_includedir}/*
-%{_mandir}/man3/*
+%attr(755,root,root) %{_libdir}/libwhoson.so
+%{_libdir}/libwhoson.la
+%{_includedir}/whoson.h
+%{_mandir}/man3/whoson.3*
+%{_mandir}/man3/wso_*.3*
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libwhoson.a
